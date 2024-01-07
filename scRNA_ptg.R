@@ -147,12 +147,7 @@ HSMM <- estimateDispersions(HSMM)
 HSMM <- detectGenes(HSMM, min_expr = 0.1)
 disp_table <- dispersionTable(HSMM)
 disp.genes <- subset(disp_table, mean_expression >= 0.1 & dispersion_empirical >= 1 * dispersion_fit)$gene_id
-expressed_genes <- row.names(subset(fData(HSMM), num_cells_expressed >= 25))
-diff_test_res <- differentialGeneTest(HSMM[expressed_genes,],
-fullModelFormulaStr = "~Tissue")
-ordering_genes <- row.names (subset(diff_test_res, qval < 0.01))
-diff_test_res1=subset(diff_test_res,diff_test_res$num_cells_expressed>100&diff_test_res$qval<0.01)
-ordering_genes1=diff_test_res1$gene_short_name
+ordering_genes1=disp.genes
 HSMM <- setOrderingFilter(HSMM,ordering_genes = ordering_genes1)
 plot_ordering_genes(HSMM)
 HSMM <- reduceDimension(HSMM, max_components = 2,
@@ -228,7 +223,7 @@ m_df<- msigdbr(species = "human",  category = "C5",subcategory = 'GO:BP' )
 geneSets <- m_df %>% split(x = .$gene_symbol, f = .$gs_name)
 GSVA_hall <- gsva(expr=as.matrix(counts2),
                   gset.idx.list=geneSets,
-                  kcdf="Poisson", #CPM, RPKM, TPMÊý¾Ý¾ÍÓÃÄ¬ÈÏÖµ"Gaussian"£¬ read countÊý¾ÝÔòÎª"Poisson"£¬
+                  kcdf="Poisson", #CPM, RPKM, TPMæ•°æ®å°±ç”¨é»˜è®¤å€¼"Gaussian"ï¼Œ read countæ•°æ®åˆ™ä¸º"Poisson"ï¼Œ
                   parallel.sz=1)
 design <- model.matrix(~0+group)
 colnames(design) = levels(factor(group))
@@ -243,7 +238,7 @@ m_df<- msigdbr(species = "human",  category = "C2",subcategory = 'CP:KEGG' )
 geneSets <- m_df %>% split(x = .$gene_symbol, f = .$gs_name)
 GSVA_hall <- gsva(expr=as.matrix(counts2),
                   gset.idx.list=geneSets,
-                  kcdf="Poisson", #CPM, RPKM, TPMÊý¾Ý¾ÍÓÃÄ¬ÈÏÖµ"Gaussian"£¬ read countÊý¾ÝÔòÎª"Poisson"£¬
+                  kcdf="Poisson", #CPM, RPKM, TPMæ•°æ®å°±ç”¨é»˜è®¤å€¼"Gaussian"ï¼Œ read countæ•°æ®åˆ™ä¸º"Poisson"ï¼Œ
                   parallel.sz=1)
 design <- model.matrix(~0+group)
 colnames(design) = levels(factor(group))
