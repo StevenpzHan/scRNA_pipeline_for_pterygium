@@ -226,7 +226,7 @@ m_df<- msigdbr(species = "human",  category = "C5",subcategory = 'GO:BP' )
 geneSets <- m_df %>% split(x = .$gene_symbol, f = .$gs_name)
 GSVA_hall <- gsva(expr=as.matrix(counts2),
                   gset.idx.list=geneSets,
-                  kcdf="Poisson", #CPM, RPKM, TPM数据就用默认值"Gaussian"， read count数据则为"Poisson"，
+                  kcdf="Poisson", 
                   parallel.sz=1)
 design <- model.matrix(~0+group)
 colnames(design) = levels(factor(group))
@@ -241,7 +241,7 @@ m_df<- msigdbr(species = "human",  category = "C2",subcategory = 'CP:KEGG' )
 geneSets <- m_df %>% split(x = .$gene_symbol, f = .$gs_name)
 GSVA_hall <- gsva(expr=as.matrix(counts2),
                   gset.idx.list=geneSets,
-                  kcdf="Poisson", #CPM, RPKM, TPM数据就用默认值"Gaussian"， read count数据则为"Poisson"，
+                  kcdf="Poisson", 
                   parallel.sz=1)
 design <- model.matrix(~0+group)
 colnames(design) = levels(factor(group))
