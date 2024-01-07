@@ -148,6 +148,7 @@ HSMM <- detectGenes(HSMM, min_expr = 0.1)
 disp_table <- dispersionTable(HSMM)
 disp.genes <- subset(disp_table, mean_expression >= 0.1 & dispersion_empirical >= 1 * dispersion_fit)$gene_id
 ordering_genes1=disp.genes
+expressed_genes <- row.names(subset(fData(HSMM), num_cells_expressed >= 25))
 HSMM <- setOrderingFilter(HSMM,ordering_genes = ordering_genes1)
 plot_ordering_genes(HSMM)
 HSMM <- reduceDimension(HSMM, max_components = 2,
@@ -156,6 +157,8 @@ HSMM <- orderCells(HSMM)
 plot_cell_trajectory(HSMM)
 plot_cell_trajectory(HSMM, cell_size = 1.5,color_by = "PI16")+scale_color_gsea()
 HSMM <- orderCells(HSMM,root_state = 2)
+pseudotime_de <- differentialGeneTest(HSMM[expressed_genes,],
+                                      fullModelFormulaStr = "~sm.ns(Pseudotime)")
 BEAM_res <- BEAM(HSMM, branch_point = 1, cores = 1)
 BEAM_res <- BEAM_res[order(BEAM_res$qval),]
 BEAM_res <- BEAM_res[,c("gene_short_name", "pval", "qval")]
